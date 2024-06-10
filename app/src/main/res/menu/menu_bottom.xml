@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/my_music"
+        android:title="@string/music"
+        android:icon="@drawable/ic_baseline_notifications_none_24"/>
+    <item
+        android:id="@+id/library"
+        android:icon="@drawable/ic_library"
+        android:title="@string/library" />
+
+    <item android:id="@+id/artist_list"
+        android:title="@string/artist"
+        android:icon="@drawable/ic_artist_pic"/>
+    <item
+        android:id="@+id/user_account"
+        android:icon="@drawable/ic_user_account"
+        android:title="@string/user_account" />
+
+    <item
+        android:id="@+id/about_us_icon"
+        android:icon="@drawable/ic_about_us"
+        android:title="About us" />
+
+</menu>

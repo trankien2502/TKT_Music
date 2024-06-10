@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:padding="@dimen/define_dimen_8"
+    tools:context=".fragment.LyricSongFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:textSize="20sp"
+        android:layout_marginTop="@dimen/define_dimen_8"
+        android:textStyle="bold"
+        android:text="Lời bài hát" />
+    <TextView
+        android:id="@+id/tv_song_playing_lyric"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:textSize="18sp"
+        android:layout_marginTop="@dimen/define_dimen_4"
+        android:textStyle="bold"
+        android:text="Tên bài hát" />
+    <TextView
+        android:id="@+id/tv_none_lyric"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:visibility="gone"
+        android:textSize="18sp"
+        android:textColor="@color/xam"
+        android:layout_marginTop="@dimen/define_dimen_4"
+        android:textStyle="italic"
+        android:text="Chưa có lời cho bài hát này!" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcv_lyric_song_playing"
+        android:layout_marginTop="@dimen/define_dimen_8"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+
+</LinearLayout>

@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "78003880388",
+    "firebase_url": "https://musicbasic-27309-default-rtdb.firebaseio.com",
+    "project_id": "musicbasic-27309",
+    "storage_bucket": "musicbasic-27309.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:78003880388:android:09017fe2e0a6e6f01aa491",
+        "android_client_info": {
+          "package_name": "com.example.music"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBO9n0fBDeZHVO6U8tH7CfaZFwrcxwMf8I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

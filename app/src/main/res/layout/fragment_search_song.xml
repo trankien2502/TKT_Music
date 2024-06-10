@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:padding="@dimen/define_dimen_8"
+    tools:context=".fragment.SearchSongFragment">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:gravity="center_horizontal"
+        android:text="TÌM KIẾM BÀI HÁT"/>
+    <RelativeLayout
+        android:id="@+id/layout_fragment_search_song"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/define_dimen_10"
+        android:layout_marginTop="@dimen/define_dimen_10"
+        android:layout_marginEnd="@dimen/define_dimen_10"
+        android:background="@color/white">
+
+        <EditText
+            android:id="@+id/edt_fragment_search_song_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_white_shape_border_red_corner_8"
+            android:hint="@string/hint_search_name"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            android:padding="@dimen/define_dimen_12"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="@dimen/text_size_xsmall"
+            tools:ignore="Autofill" />
+    </RelativeLayout>
+    <TextView
+        android:id="@+id/no_result_song"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="italic"
+        android:layout_marginTop="@dimen/define_dimen_10"
+        android:textColor="@color/xam"
+        android:gravity="center_horizontal"
+        android:text="Không có kết quả nào!"
+        android:visibility="visible"
+        android:textSize="16sp"/>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcv_fragment_list_search"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/define_dimen_8"
+        android:focusable="auto"
+        android:nestedScrollingEnabled="false"
+        android:visibility="visible"
+        tools:targetApi="lollipop" />
+
+
+
+</LinearLayout>
