@@ -49,6 +49,7 @@ public class SignUpActivity extends BaseActivity {
         mActivitySignUpBinding.layoutSignIn.setOnClickListener(v -> finish());
         mActivitySignUpBinding.btnSignUp.setOnClickListener(v -> onClickValidateSignUp());
         getListUser();
+
     }
 
     private void onClickValidateSignUp() {
