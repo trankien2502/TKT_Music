@@ -53,6 +53,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.function.ToIntBiFunction;
@@ -84,17 +85,41 @@ public class PlaySongFragment extends Fragment implements View.OnClickListener {
             LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBroadcastReceiver,
                     new IntentFilter(Constant.CHANGE_LISTENER));
         }
-        if(checkLoginStatus()){
+        if (checkLoginStatus()) {
             getPlaylistOfUser();
             getFavouriteSongOfUser();
-
         }
+        initUI();
         initControl();
         showInforSong();
         mAction = MusicService.mAction;
         handleMusicAction();
 
         return mFragmentPlaySongBinding.getRoot();
+    }
+
+    private void initUI() {
+        switch (MusicService.mRepeatMode) {
+            case Constant.REPEAT_NONE:
+                mFragmentPlaySongBinding.imgRepeat.setImageResource(R.drawable.img_repeat_black);
+                mFragmentPlaySongBinding.imgRepeat.setColorFilter(Objects.requireNonNull(getContext()).getResources().getColor(R.color.gray));
+                break;
+            case Constant.REPEAT:
+                mFragmentPlaySongBinding.imgRepeat.setImageResource(R.drawable.img_repeat_black);
+                mFragmentPlaySongBinding.imgRepeat.setColorFilter(Objects.requireNonNull(getContext()).getResources().getColor(R.color.xam2));
+                break;
+            case Constant.REPEAT_ONE:
+                mFragmentPlaySongBinding.imgRepeat.setImageResource(R.drawable.img_repeat_one_black);
+                mFragmentPlaySongBinding.imgRepeat.setColorFilter(Objects.requireNonNull(getContext()).getResources().getColor(R.color.xam2));
+                break;
+        }
+        if (MusicService.isShuffle) {
+            mFragmentPlaySongBinding.imgShuffle.setColorFilter(Objects.requireNonNull(getContext()).getResources().getColor(R.color.xam2));
+        } else {
+            mFragmentPlaySongBinding.imgShuffle.setColorFilter(Objects.requireNonNull(getContext()).getResources().getColor(R.color.gray));
+        }
+
+
     }
 
     private void initControl() {
@@ -124,12 +149,14 @@ public class PlaySongFragment extends Fragment implements View.OnClickListener {
             }
         });
     }
+
     public boolean checkLoginStatus() {
         SharedPreferences sharedPreferences = requireContext().getSharedPreferences("loginData", Context.MODE_PRIVATE);
         Boolean getCheck = sharedPreferences.getBoolean("loginCheck", Boolean.valueOf(String.valueOf(Context.MODE_PRIVATE)));
         return getCheck;
     }
-    private void showDialogSignInCheck(){
+
+    private void showDialogSignInCheck() {
         AlertDialog Dialog = new AlertDialog.Builder(getContext())
                 .setTitle("ĐĂNG NHẬP")
                 .setMessage("Để sử dụng tính năng này cần có tài khoản. Bạn có muốn đăng nhập?")
@@ -160,7 +187,7 @@ public class PlaySongFragment extends Fragment implements View.OnClickListener {
         GlideUtils.loadUrl(currentSong.getImage(), mFragmentPlaySongBinding.imgSong);
         if (isFavourite) {
             mFragmentPlaySongBinding.imgFavourite.setImageResource(R.drawable.ic_favourite);
-        }else{
+        } else {
             mFragmentPlaySongBinding.imgFavourite.setImageResource(R.drawable.ic_favourite_none);
         }
 
@@ -191,12 +218,14 @@ public class PlaySongFragment extends Fragment implements View.OnClickListener {
                 break;
 
             case Constant.PAUSE:
+                showInforSong();
                 stopAnimationPlayMusic();
                 showSeekBar();
                 showStatusButtonPlay();
                 break;
 
             case Constant.RESUME:
+                showInforSong();
                 startAnimationPlayMusic();
                 showSeekBar();
                 showStatusButtonPlay();
@@ -292,67 +321,68 @@ public class PlaySongFragment extends Fragment implements View.OnClickListener {
     }
 
     private void clickOnRepeatButton() {
-        switch (MusicService.mRepeatMode){
+        switch (MusicService.mRepeatMode) {
             case Constant.REPEAT_NONE:
                 MusicService.mRepeatMode = Constant.REPEAT;
-                mFragmentPlaySongBinding.imgRepeat.setColorFilter(R.color.xam2);
-                Toast.makeText(getContext(), "Repeat All!",Toast.LENGTH_SHORT).show();
+                mFragmentPlaySongBinding.imgRepeat.setColorFilter(Objects.requireNonNull(getContext()).getResources().getColor(R.color.xam2));
+                Toast.makeText(getContext(), "Repeat All!", Toast.LENGTH_SHORT).show();
                 break;
             case Constant.REPEAT:
                 MusicService.mRepeatMode = Constant.REPEAT_ONE;
                 mFragmentPlaySongBinding.imgRepeat.setImageResource(R.drawable.img_repeat_one_black);
-                mFragmentPlaySongBinding.imgRepeat.setColorFilter(R.color.xam2);
-                Toast.makeText(getContext(), "Repeat One!",Toast.LENGTH_SHORT).show();
+                mFragmentPlaySongBinding.imgRepeat.setColorFilter(Objects.requireNonNull(getContext()).getResources().getColor(R.color.xam2));
+                Toast.makeText(getContext(), "Repeat One!", Toast.LENGTH_SHORT).show();
                 break;
             case Constant.REPEAT_ONE:
                 MusicService.mRepeatMode = Constant.REPEAT_NONE;
                 mFragmentPlaySongBinding.imgRepeat.setImageResource(R.drawable.img_repeat_black);
-                mFragmentPlaySongBinding.imgRepeat.setColorFilter(R.color.gray);
-                Toast.makeText(getContext(), "No Repeat!",Toast.LENGTH_SHORT).show();
+                mFragmentPlaySongBinding.imgRepeat.setColorFilter(Objects.requireNonNull(getContext()).getResources().getColor(R.color.gray));
+                Toast.makeText(getContext(), "No Repeat!", Toast.LENGTH_SHORT).show();
                 break;
         }
     }
-    private void clickOnFavouriteButton(){
+
+    private void clickOnFavouriteButton() {
 
         SharedPreferences sharedPreferences = requireContext().getSharedPreferences("loginData", Context.MODE_PRIVATE);
         String getIdCurrent = sharedPreferences.getString("loginId", String.valueOf(Context.MODE_PRIVATE));
         if (MusicService.mListSongPlaying == null || MusicService.mListSongPlaying.isEmpty()) {
             return;
         }
-        if (!checkLoginStatus()){
+        if (!checkLoginStatus()) {
             showDialogSignInCheck();
             return;
         }
         Song currentSong = MusicService.mListSongPlaying.get(MusicService.mSongPosition);
         String pathSong = String.valueOf(currentSong.getId());
         DatabaseReference reference;
-        if (isFavourite){
+        if (isFavourite) {
             isFavourite = false;
-            reference = firebaseDatabase.getReference("user/"+getIdCurrent+"/list_favourite/"+pathSong);
+            reference = firebaseDatabase.getReference("user/" + getIdCurrent + "/list_favourite/" + pathSong);
             reference.removeValue(new DatabaseReference.CompletionListener() {
                 @Override
                 public void onComplete(@Nullable @org.jetbrains.annotations.Nullable DatabaseError error, @NonNull DatabaseReference ref) {
-                    Toast.makeText(getContext(),"Đã xóa khỏi playlist yêu thích!",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Đã xóa khỏi playlist yêu thích!", Toast.LENGTH_SHORT).show();
                 }
             });
             showInforSong();
 
-        }
-        else{
+        } else {
             isFavourite = true;
-            reference = firebaseDatabase.getReference("user/"+getIdCurrent+"/list_favourite");
+            reference = firebaseDatabase.getReference("user/" + getIdCurrent + "/list_favourite");
             reference.child(pathSong).setValue(currentSong, new DatabaseReference.CompletionListener() {
                 @Override
                 public void onComplete(@Nullable @org.jetbrains.annotations.Nullable DatabaseError error, @NonNull DatabaseReference ref) {
-                    Toast.makeText(getContext(),"Đã thêm vào playlist yêu thích!",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Đã thêm vào playlist yêu thích!", Toast.LENGTH_SHORT).show();
                 }
             });
             showInforSong();
         }
 
     }
-    private void clickOnAddSongToPlaylistButton(){
-        if (!checkLoginStatus()){
+
+    private void clickOnAddSongToPlaylistButton() {
+        if (!checkLoginStatus()) {
             showDialogSignInCheck();
             return;
         }
@@ -363,7 +393,7 @@ public class PlaySongFragment extends Fragment implements View.OnClickListener {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.layout_dialog_choose_playlist_to_add_song);
         Window window = dialog.getWindow();
-        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         window.setBackgroundDrawable(new ColorDrawable(TRANSPARENT));
         dialog.setCancelable(false);
 
@@ -373,14 +403,14 @@ public class PlaySongFragment extends Fragment implements View.OnClickListener {
         Button btnCancel = dialog.findViewById(R.id.btn_cancel_choose);
         Button btnAddPlaylist = dialog.findViewById(R.id.btn_choose_playlist);
 
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(),3);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 3);
         recyclerViewChoose.setLayoutManager(gridLayoutManager);
-        if (mListPlaylist.size()==0){
+        if (mListPlaylist.size() == 0) {
             tvTitle.setText("Bạn chưa có playlist nào! Vui lòng tạo thêm playlist!");
             btnCancel.setText("Thoát");
             btnAddPlaylist.setVisibility(View.GONE);
         }
-        PlaylistGridAdapter playlistGridAdapter =new PlaylistGridAdapter(mListPlaylist, new IOnClickPlaylistItemListener() {
+        PlaylistGridAdapter playlistGridAdapter = new PlaylistGridAdapter(mListPlaylist, new IOnClickPlaylistItemListener() {
             @Override
             public void onClickPlaylistItemListener(Playlist playlist) {
                 tvPlaylistNameChoose.setText(playlist.getName());
@@ -404,24 +434,23 @@ public class PlaySongFragment extends Fragment implements View.OnClickListener {
 //                String getIdCurrent = sharedPreferences.getString("loginId", String.valueOf(Context.MODE_PRIVATE));
 //                int idCurrent = Integer.parseInt(getIdCurrent);
                 //String pathIdUserCurrent = String.valueOf(idCurrent);
-                if(idPlaylistSelected[0]==-1){
-                    Toast.makeText(getContext(),"Bạn chưa chọn playlist!",Toast.LENGTH_SHORT).show();
+                if (idPlaylistSelected[0] == -1) {
+                    Toast.makeText(getContext(), "Bạn chưa chọn playlist!", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 String pathPlaylist = String.valueOf(idPlaylistSelected[0]);
                 String pathSongCurrent = String.valueOf(currentSong.getId());
-                DatabaseReference reference = firebaseDatabase.getReference("playlist/"+pathPlaylist+"/list");
+                DatabaseReference reference = firebaseDatabase.getReference("playlist/" + pathPlaylist + "/list");
                 reference.child(pathSongCurrent).setValue(currentSong, new DatabaseReference.CompletionListener() {
                     @Override
                     public void onComplete(@Nullable @org.jetbrains.annotations.Nullable DatabaseError error, @NonNull DatabaseReference ref) {
-                        Toast.makeText(getContext(),"Them thanh cong!",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Them thanh cong!", Toast.LENGTH_SHORT).show();
                     }
                 });
 //
                 dialog.dismiss();
             }
-
 
 
         });
@@ -430,18 +459,15 @@ public class PlaySongFragment extends Fragment implements View.OnClickListener {
     }
 
 
-
-
     private void clickOnShuffleButton() {
-        if (MusicService.isShuffle){
+        if (MusicService.isShuffle) {
             MusicService.isShuffle = false;
-            Toast.makeText(getContext(), "Shuffle Mode Off!",Toast.LENGTH_SHORT).show();
-            mFragmentPlaySongBinding.imgShuffle.setColorFilter(R.color.xam2);
-        }
-        else{
+            Toast.makeText(getContext(), "Shuffle Mode Off!", Toast.LENGTH_SHORT).show();
+            mFragmentPlaySongBinding.imgShuffle.setColorFilter(Objects.requireNonNull(getContext()).getResources().getColor(R.color.gray));
+        } else {
             MusicService.isShuffle = true;
-            Toast.makeText(getContext(), "Shuffle Mode On!",Toast.LENGTH_SHORT).show();
-            mFragmentPlaySongBinding.imgShuffle.setColorFilter(R.color.gray);
+            Toast.makeText(getContext(), "Shuffle Mode On!", Toast.LENGTH_SHORT).show();
+            mFragmentPlaySongBinding.imgShuffle.setColorFilter(Objects.requireNonNull(getContext()).getResources().getColor(R.color.xam2));
         }
 
 
@@ -462,7 +488,8 @@ public class PlaySongFragment extends Fragment implements View.OnClickListener {
             GlobalFuntion.startMusicService(getActivity(), Constant.RESUME, MusicService.mSongPosition);
         }
     }
-    private void getPlaylistOfUser(){
+
+    private void getPlaylistOfUser() {
         SharedPreferences sharedPreferences = requireContext().getSharedPreferences("loginData", Context.MODE_PRIVATE);
         String getIdCurrent = sharedPreferences.getString("loginId", String.valueOf(Context.MODE_PRIVATE));
         int idCurrent = Integer.parseInt(getIdCurrent);
@@ -476,7 +503,7 @@ public class PlaySongFragment extends Fragment implements View.OnClickListener {
                     if (playlist == null) {
                         return;
                     }
-                    if (playlist.getUser_id() == idCurrent){
+                    if (playlist.getUser_id() == idCurrent) {
                         mListPlaylist.add(playlist);
                     }
 
@@ -489,11 +516,12 @@ public class PlaySongFragment extends Fragment implements View.OnClickListener {
             }
         });
     }
-    private void getFavouriteSongOfUser(){
+
+    private void getFavouriteSongOfUser() {
         SharedPreferences sharedPreferences = requireContext().getSharedPreferences("loginData", Context.MODE_PRIVATE);
         String getIdCurrent = sharedPreferences.getString("loginId", String.valueOf(Context.MODE_PRIVATE));
         //int idCurrent = Integer.parseInt(getIdCurrent);
-        DatabaseReference reference = firebaseDatabase.getReference("user/"+getIdCurrent+"/list_favourite");
+        DatabaseReference reference = firebaseDatabase.getReference("user/" + getIdCurrent + "/list_favourite");
         if (MusicService.mListSongPlaying == null || MusicService.mListSongPlaying.isEmpty()) {
             return;
         }
@@ -501,7 +529,7 @@ public class PlaySongFragment extends Fragment implements View.OnClickListener {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                mListSongFavourite= new ArrayList<>();
+                mListSongFavourite = new ArrayList<>();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     Song song = dataSnapshot.getValue(Song.class);
                     if (song == null) {
@@ -509,7 +537,7 @@ public class PlaySongFragment extends Fragment implements View.OnClickListener {
                     }
 
                     //mListSongFavourite.add(song);
-                    if (song.getId()==currentSong.getId()){
+                    if (song.getId() == currentSong.getId()) {
                         isFavourite = true;
                         break;
                     }
