@@ -34,7 +34,6 @@ public class ArtistFragment extends Fragment {
     FragmentArtistBinding mFragmentArtistBinding;
     ArtistGridAdapter mArtistGridAdapter;
     List<Artist> mListArtists;
-    IOnClickArtistItemListener iOnClickArtistItemListener;
     static String selectedArtist;
 
 

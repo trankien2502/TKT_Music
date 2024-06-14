@@ -2,7 +2,7 @@ package com.example.music.constant;
 
 public class Constant {
     // Max count
-    public static final int MAX_COUNT_BANNER = 15;
+    public static final int MAX_COUNT_BANNER = 5;
     public static final int MAX_COUNT_POPULAR = 6;
     public static final int MAX_COUNT_LATEST = 6;
 

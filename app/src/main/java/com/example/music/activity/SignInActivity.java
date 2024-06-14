@@ -41,10 +41,6 @@ public class SignInActivity extends BaseActivity {
         getListUser();
     }
 
-    private void onClickForgotPassword() {
-
-    }
-
     private void onClickValidateSignIn() {
         String strEmail = mActivitySignInBinding.edtEmail.getText().toString().trim();
         String strPassword = mActivitySignInBinding.edtPassword.getText().toString().trim();
@@ -96,29 +92,7 @@ public class SignInActivity extends BaseActivity {
         editor.putString("loginId", String.valueOf(id));
         editor.apply();
     }
-    private void signInUser(String strEmail, String strPassword) {
-        showProgressDialog(true);
 
-        fireAuth.signInWithEmailAndPassword(strEmail, strPassword)
-                .addOnCompleteListener(this, task -> {
-                    showProgressDialog(false);
-                    if (task.isSuccessful()) {
-                        FirebaseUser user = fireAuth.getCurrentUser();
-                        if (user != null) {
-//                            User userObject = new User(user.getEmail(), password);
-//                            if (user.getEmail() != null && user.getEmail().contains(Constant.ADMIN_EMAIL_FORMAT)) {
-//                                userObject.setAdmin(true);
-//                            }
-//                            DataStoreManager.setUser(userObject);
-                            GlobalFuntion.startActivity(SignInActivity.this,MainActivity.class);
-                            finishAffinity();
-                        }
-                    } else {
-                        Toast.makeText(SignInActivity.this, "Đăng nhập thất bại, vui lòng thử lại!",
-                                Toast.LENGTH_SHORT).show();
-                    }
-                });
-    }
     private void getListUser() {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance("https://musicbasic-27309-default-rtdb.firebaseio.com");
         DatabaseReference reference = firebaseDatabase.getReference("user");
@@ -143,5 +117,28 @@ public class SignInActivity extends BaseActivity {
             }
         });
 
+    }
+    private void signInUser(String strEmail, String strPassword) {
+        showProgressDialog(true);
+
+        fireAuth.signInWithEmailAndPassword(strEmail, strPassword)
+                .addOnCompleteListener(this, task -> {
+                    showProgressDialog(false);
+                    if (task.isSuccessful()) {
+                        FirebaseUser user = fireAuth.getCurrentUser();
+                        if (user != null) {
+//                            User userObject = new User(user.getEmail(), password);
+//                            if (user.getEmail() != null && user.getEmail().contains(Constant.ADMIN_EMAIL_FORMAT)) {
+//                                userObject.setAdmin(true);
+//                            }
+//                            DataStoreManager.setUser(userObject);
+                            GlobalFuntion.startActivity(SignInActivity.this,MainActivity.class);
+                            finishAffinity();
+                        }
+                    } else {
+                        Toast.makeText(SignInActivity.this, "Đăng nhập thất bại, vui lòng thử lại!",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 }

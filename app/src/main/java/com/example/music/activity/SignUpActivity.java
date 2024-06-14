@@ -124,8 +124,8 @@ public class SignUpActivity extends BaseActivity {
                 showProgressDialog(false);
                 Toast.makeText(SignUpActivity.this, "Đăng ký thành công!",
                         Toast.LENGTH_SHORT).show();
-                saveData(user.getEmail(),user.getId());
-                GlobalFuntion.startActivity(SignUpActivity.this,MainActivity.class);
+                //saveData(user.getEmail(),user.getId());
+                GlobalFuntion.startActivity(SignUpActivity.this,SignInActivity.class);
                 finishAffinity();
             }
         });
