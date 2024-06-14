@@ -174,23 +174,30 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         }
     }
     public void prevSong() {
-        if (mListSongPlaying.size() > 1) {
-            if (mSongPosition > 0) {
-                if (mRepeatMode!=Constant.REPEAT_ONE) mSongPosition--;
-            } else{
-                switch (mRepeatMode){
-                    case Constant.REPEAT_NONE:
-                        mSongPosition=0;
-                        break;
-                    case Constant.REPEAT:
-                        mSongPosition= mListSongPlaying.size() - 1;
-                        break;
-                    case Constant.REPEAT_ONE:
-                        break;
-                }
+        if (isShuffle){
+            if (mRepeatMode != Constant.REPEAT_ONE) {
+                Random randomSong = new Random();
+                mSongPosition = randomSong.nextInt(mListSongPlaying.size());
             }
         } else {
-            mSongPosition = 0;
+            if (mListSongPlaying.size() > 1) {
+                if (mSongPosition > 0) {
+                    if (mRepeatMode!=Constant.REPEAT_ONE) mSongPosition--;
+                } else{
+                    switch (mRepeatMode){
+                        case Constant.REPEAT_NONE:
+                            mSongPosition=0;
+                            break;
+                        case Constant.REPEAT:
+                            mSongPosition= mListSongPlaying.size() - 1;
+                            break;
+                        case Constant.REPEAT_ONE:
+                            break;
+                    }
+                }
+            } else {
+                mSongPosition = 0;
+            }
         }
         sendMusicNotification();
         sendBroadcastChangeListener();
